@@ -25,6 +25,8 @@ scripts/stromentlastung.sh start     # Keycloak (Compose), vier Dienste (JDK 17,
 scripts/stromentlastung.sh status
 scripts/stromentlastung.sh stop
 scripts/stromentlastung.sh reset     # stop und H2-Dateien löschen; der nächste Start sät neu
+scripts/stromentlastung.sh show codegen/STROM-4   # in allen Repos holen, den Branch auschecken, wo er existiert, neu starten
+scripts/stromentlastung.sh main      # alle Repos zurück auf main und neu starten
 ```
 
 Voraussetzungen: Docker, JDK 17, Node 22. Der erste Start lädt Maven und die Abhängigkeiten und dauert entsprechend; danach sind die Dienste in unter einer Minute oben. Jeder Dienst hält seine H2-Datenbank im Dateimodus unter `./data/` seines Repositories; die Saatdaten-Geschichten aus Fachkonzept Kap. 12 werden von Flyway eingespielt.

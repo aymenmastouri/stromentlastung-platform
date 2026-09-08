@@ -5,6 +5,9 @@
 #   stromentlastung.sh stop     beendet, was dieses Skript gestartet hat
 #   stromentlastung.sh status   wer läuft
 #   stromentlastung.sh reset    stop, H2-Dateien löschen — der nächste Start sät neu
+#   stromentlastung.sh show <branch>   in allen sieben Repos holen, den Branch auschecken, wo er
+#                               existiert (die übrigen bleiben auf main), und neu starten
+#   stromentlastung.sh main     alle Repos zurück auf main (ff-only) und neu starten
 #   stromentlastung.sh logs <dienst>   tail des Dienstprotokolls
 #
 # Das Skript beendet nur Prozesse, deren Arbeitsverzeichnis im Arbeitsbereich liegt.
@@ -90,9 +93,36 @@ cmd_reset() {
   cmd_stop
   for d in "${DIENSTE[@]}"; do rm -rf "$ROOT/stromentlastung-$d/data" && ok "H2-Dateien von $d gelöscht"; done
 }
+REPOS=(platform unternehmen antrag bescheid zahlung ui e2e)
+
+cmd_show() {
+  local branch=$1; [ -z "$branch" ] && { warn "Branch fehlt: show <branch>"; exit 1; }
+  say "Branch $branch"
+  for r in "${REPOS[@]}"; do
+    local d="$ROOT/stromentlastung-$r"
+    git -C "$d" fetch -q origin --prune
+    if git -C "$d" show-ref -q --verify "refs/remotes/origin/$branch"; then
+      git -C "$d" checkout -q -B "$branch" "origin/$branch" && ok "$r: $branch ($(git -C "$d" rev-parse --short HEAD))"
+    else
+      git -C "$d" checkout -q main && ok "$r: bleibt auf main"
+    fi
+  done
+  cmd_stop; cmd_start
+}
+
+cmd_main() {
+  say "Zurück auf main"
+  for r in "${REPOS[@]}"; do
+    local d="$ROOT/stromentlastung-$r"
+    git -C "$d" checkout -q main && git -C "$d" pull -q --ff-only origin main && ok "$r: main ($(git -C "$d" rev-parse --short HEAD))"
+  done
+  cmd_stop; cmd_start
+}
+
 cmd_logs() { tail -n 80 -f "$RUN/${1:-antrag}.log"; }
 
 case "${1:-}" in
-  start) cmd_start ;; stop) cmd_stop ;; status) cmd_status ;; reset) cmd_reset ;; logs) cmd_logs "${2:-}" ;;
-  *) sed -n '2,10p' "$0"; exit 1 ;;
+  start) cmd_start ;; stop) cmd_stop ;; status) cmd_status ;; reset) cmd_reset ;;
+  show) cmd_show "${2:-}" ;; main) cmd_main ;; logs) cmd_logs "${2:-}" ;;
+  *) sed -n '2,13p' "$0"; exit 1 ;;
 esac
