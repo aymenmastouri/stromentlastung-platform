@@ -1,0 +1,535 @@
+{
+  "realm": "stromentlastung",
+  "displayName": "Stromentlastung – Referenzverfahren",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": false,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": false,
+  "internationalizationEnabled": true,
+  "supportedLocales": [
+    "de",
+    "en"
+  ],
+  "defaultLocale": "de",
+  "accessTokenLifespan": 1800,
+  "ssoSessionIdleTimeout": 28800,
+  "ssoSessionMaxLifespan": 36000,
+  "roles": {
+    "realm": [
+      {
+        "name": "antragsteller",
+        "description": "Nutzerkonto eines Unternehmens"
+      },
+      {
+        "name": "sachbearbeitung",
+        "description": "Sachbearbeitung des Hauptzollamts"
+      },
+      {
+        "name": "zeichnung",
+        "description": "Zeichnungsbefugnis des Hauptzollamts"
+      },
+      {
+        "name": "pruefdienst",
+        "description": "Außenprüfung oder Innenrevision"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "stromentlastung-web",
+      "name": "Stromentlastung Oberfläche",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "rootUrl": "http://localhost:4202",
+      "baseUrl": "http://localhost:4202",
+      "redirectUris": [
+        "http://localhost:4202/*",
+        "http://localhost:8090/*"
+      ],
+      "webOrigins": [
+        "http://localhost:4202",
+        "http://localhost:8090"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:4202/*##http://localhost:8090/*"
+      },
+      "fullScopeAllowed": true,
+      "protocolMappers": [
+        {
+          "name": "unternehmen",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "unternehmen",
+            "claim.name": "unternehmen",
+            "jsonType.label": "String",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        },
+        {
+          "name": "dienststelle",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "dienststelle",
+            "claim.name": "dienststelle",
+            "jsonType.label": "String",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "nordfeld@stromentlastung.dev",
+      "email": "nordfeld@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Nordfeld",
+      "lastName": "Metallbau",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "antragsteller"
+      ],
+      "attributes": {
+        "unternehmen": [
+          "U-001"
+        ]
+      }
+    },
+    {
+      "username": "hansa-bau@stromentlastung.dev",
+      "email": "hansa-bau@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Hansa",
+      "lastName": "Bau",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "antragsteller"
+      ],
+      "attributes": {
+        "unternehmen": [
+          "U-002"
+        ]
+      }
+    },
+    {
+      "username": "kuestenmuehle@stromentlastung.dev",
+      "email": "kuestenmuehle@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Küstenmühle",
+      "lastName": "Brot",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "antragsteller"
+      ],
+      "attributes": {
+        "unternehmen": [
+          "U-003"
+        ]
+      }
+    },
+    {
+      "username": "glaswerk@stromentlastung.dev",
+      "email": "glaswerk@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Lübecker",
+      "lastName": "Glaswerk",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "antragsteller"
+      ],
+      "attributes": {
+        "unternehmen": [
+          "U-004"
+        ]
+      }
+    },
+    {
+      "username": "weserland@stromentlastung.dev",
+      "email": "weserland@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Weserland",
+      "lastName": "Kunststoffe",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "antragsteller"
+      ],
+      "attributes": {
+        "unternehmen": [
+          "U-005"
+        ]
+      }
+    },
+    {
+      "username": "elbtal@stromentlastung.dev",
+      "email": "elbtal@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Elbtal",
+      "lastName": "Maschinenbau",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "antragsteller"
+      ],
+      "attributes": {
+        "unternehmen": [
+          "U-006"
+        ]
+      }
+    },
+    {
+      "username": "ostsee-werft@stromentlastung.dev",
+      "email": "ostsee-werft@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Ostsee",
+      "lastName": "Werft",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "antragsteller"
+      ],
+      "attributes": {
+        "unternehmen": [
+          "U-007"
+        ]
+      }
+    },
+    {
+      "username": "alpenland@stromentlastung.dev",
+      "email": "alpenland@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Alpenland",
+      "lastName": "Solarmodule",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "antragsteller"
+      ],
+      "attributes": {
+        "unternehmen": [
+          "U-008"
+        ]
+      }
+    },
+    {
+      "username": "hafenkontor@stromentlastung.dev",
+      "email": "hafenkontor@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Hafenkontor",
+      "lastName": "Handel",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "antragsteller"
+      ],
+      "attributes": {
+        "unternehmen": [
+          "U-009"
+        ]
+      }
+    },
+    {
+      "username": "marschhof@stromentlastung.dev",
+      "email": "marschhof@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Marschhof",
+      "lastName": "Agrar",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "antragsteller"
+      ],
+      "attributes": {
+        "unternehmen": [
+          "U-010"
+        ]
+      }
+    },
+    {
+      "username": "schwarzwald-papier@stromentlastung.dev",
+      "email": "schwarzwald-papier@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Schwarzwald",
+      "lastName": "Papier",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "antragsteller"
+      ],
+      "attributes": {
+        "unternehmen": [
+          "U-011"
+        ]
+      }
+    },
+    {
+      "username": "fischwerk@stromentlastung.dev",
+      "email": "fischwerk@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Dithmarscher",
+      "lastName": "Fischwerk",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "antragsteller"
+      ],
+      "attributes": {
+        "unternehmen": [
+          "U-012"
+        ]
+      }
+    },
+    {
+      "username": "ziegelei@stromentlastung.dev",
+      "email": "ziegelei@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Wattenmeer",
+      "lastName": "Ziegelei",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "antragsteller"
+      ],
+      "attributes": {
+        "unternehmen": [
+          "U-013"
+        ]
+      }
+    },
+    {
+      "username": "wagner@stromentlastung.dev",
+      "email": "wagner@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Sabine",
+      "lastName": "Wagner",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "sachbearbeitung"
+      ],
+      "attributes": {
+        "dienststelle": [
+          "HZA-N"
+        ]
+      }
+    },
+    {
+      "username": "demir@stromentlastung.dev",
+      "email": "demir@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Murat",
+      "lastName": "Demir",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "sachbearbeitung"
+      ],
+      "attributes": {
+        "dienststelle": [
+          "HZA-N"
+        ]
+      }
+    },
+    {
+      "username": "becker@stromentlastung.dev",
+      "email": "becker@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Lars",
+      "lastName": "Becker",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "zeichnung"
+      ],
+      "attributes": {
+        "dienststelle": [
+          "HZA-N"
+        ]
+      }
+    },
+    {
+      "username": "roth@stromentlastung.dev",
+      "email": "roth@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Petra",
+      "lastName": "Roth",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "pruefdienst"
+      ],
+      "attributes": {
+        "dienststelle": [
+          "HZA-N"
+        ]
+      }
+    },
+    {
+      "username": "keller@stromentlastung.dev",
+      "email": "keller@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Jonas",
+      "lastName": "Keller",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "sachbearbeitung"
+      ],
+      "attributes": {
+        "dienststelle": [
+          "HZA-S"
+        ]
+      }
+    },
+    {
+      "username": "vogt@stromentlastung.dev",
+      "email": "vogt@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Anna",
+      "lastName": "Vogt",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "zeichnung"
+      ],
+      "attributes": {
+        "dienststelle": [
+          "HZA-S"
+        ]
+      }
+    }
+  ]
+}

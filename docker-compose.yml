@@ -1,0 +1,85 @@
+# Referenzverfahren stromentlastung.
+#
+# Standard (kein Profil): nur Keycloak — die Dienste und die Oberfläche laufen
+# auf dem Rechner (scripts/stromentlastung.sh start).
+# Profil "full": alles im Container hinter nginx auf Port 8090.
+services:
+  keycloak:
+    container_name: stromentlastung-keycloak
+    image: quay.io/keycloak/keycloak:24.0.2
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: "9091"
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "false"
+    command: ["start-dev", "--import-realm"]
+    volumes:
+      - ./keycloak/realm:/opt/keycloak/data/import:ro
+    ports:
+      - "${STROMENTLASTUNG_KC_PORT:-9091}:8080"
+    networks: [stromentlastung]
+    restart: unless-stopped
+
+  unternehmen:
+    profiles: [full]
+    build: ../stromentlastung-unternehmen
+    environment: &dienst-env
+      STROMENTLASTUNG_ISSUER: http://localhost:9091/realms/stromentlastung
+      STROMENTLASTUNG_JWKS_URI: http://keycloak:8080/realms/stromentlastung/protocol/openid-connect/certs
+      STROMENTLASTUNG_UNTERNEHMEN_URL: http://unternehmen:8091/api/unternehmen
+      STROMENTLASTUNG_BESCHEID_URL: http://bescheid:8093/api/bescheide
+      STROMENTLASTUNG_ZAHLUNG_URL: http://zahlung:8094/api/zahlungen
+    volumes: ["unternehmen-data:/app/data"]
+    networks: [stromentlastung]
+    depends_on: [keycloak]
+
+  antrag:
+    profiles: [full]
+    build: ../stromentlastung-antrag
+    environment: *dienst-env
+    volumes: ["antrag-data:/app/data"]
+    networks: [stromentlastung]
+    depends_on: [keycloak, unternehmen, bescheid, zahlung]
+
+  bescheid:
+    profiles: [full]
+    build: ../stromentlastung-bescheid
+    environment: *dienst-env
+    volumes: ["bescheid-data:/app/data"]
+    networks: [stromentlastung]
+    depends_on: [keycloak]
+
+  zahlung:
+    profiles: [full]
+    build: ../stromentlastung-zahlung
+    environment: *dienst-env
+    volumes: ["zahlung-data:/app/data"]
+    networks: [stromentlastung]
+    depends_on: [keycloak]
+
+  ui:
+    profiles: [full]
+    build: ../stromentlastung-ui
+    networks: [stromentlastung]
+
+  gateway:
+    profiles: [full]
+    image: nginx:1.27-alpine
+    volumes:
+      - ./gateway/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./gateway/proxy_params_stromentlastung:/etc/nginx/proxy_params_stromentlastung:ro
+    ports:
+      - "${STROMENTLASTUNG_GATEWAY_PORT:-8090}:80"
+    networks: [stromentlastung]
+    depends_on: [ui, unternehmen, antrag, bescheid, zahlung]
+
+networks:
+  stromentlastung:
+    driver: bridge
+
+volumes:
+  unternehmen-data:
+  antrag-data:
+  bescheid-data:
+  zahlung-data:
