@@ -33,7 +33,7 @@ Containerbetrieb: `docker compose --profile full up --build` baut alles und stel
 
 ## Konten
 
-Alle Passwörter lauten `stromentlastung`. Unternehmen: `nordfeld@stromentlastung.dev` (Nordfeld Metallbau, Regelfall), `ostsee-werft@stromentlastung.dev` (offene Rückforderung), `elbtal@stromentlastung.dev` (Rückfrage), `weserland@stromentlastung.dev` (Entwurf für 2026) und die übrigen aus Architektur Kap. 4. Hauptzollamt Nord: `wagner@` und `demir@` (Sachbearbeitung), `becker@` (Zeichnung), `roth@` (Prüfdienst); Hauptzollamt Süd: `keller@` (Sachbearbeitung), `vogt@` (Zeichnung).
+Alle Passwörter lauten `stromentlastung`. Unternehmen: `nordfeld@stromentlastung.dev` (Nordfeld Metallbau, Regelfall), `ostsee-werft@stromentlastung.dev` (offene Rückforderung), `elbtal@stromentlastung.dev` (Rückfrage), `weserland@stromentlastung.dev` (Entwurf für 2026) und die übrigen aus Architektur Kap. 4. Hauptzollamt Nord: `mastouri@` (Sachbearbeitung und Zeichnung), `wagner@` und `demir@` (Sachbearbeitung), `becker@` (Zeichnung), `roth@` (Prüfdienst); Hauptzollamt Süd: `keller@` (Sachbearbeitung), `vogt@` (Zeichnung).
 
 ## Was die Saat zeigt
 

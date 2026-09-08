@@ -530,6 +530,30 @@
           "HZA-S"
         ]
       }
+    },
+    {
+      "username": "mastouri@stromentlastung.dev",
+      "email": "mastouri@stromentlastung.dev",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Aymen",
+      "lastName": "Mastouri",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stromentlastung",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "sachbearbeitung",
+        "zeichnung"
+      ],
+      "attributes": {
+        "dienststelle": [
+          "HZA-N"
+        ]
+      }
     }
   ]
 }

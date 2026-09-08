@@ -54,7 +54,7 @@ Die Saatdaten der vier Dienste erzählen dieselben Geschichten und müssen desha
 | `U-012` | Dithmarscher Fischwerk GmbH | D | 25761 Büsum | HZA-N | `fischwerk@stromentlastung.dev` |
 | `U-013` | Wattenmeer Ziegelei GmbH | D | 26506 Norden | HZA-N | `ziegelei@stromentlastung.dev` |
 
-Beschäftigte: Sabine Wagner (`wagner@stromentlastung.dev`, Sachbearbeitung, HZA-N), Murat Demir (`demir@stromentlastung.dev`, Sachbearbeitung, HZA-N), Lars Becker (`becker@stromentlastung.dev`, Zeichnung, HZA-N), Petra Roth (`roth@stromentlastung.dev`, Prüfdienst, HZA-N), Jonas Keller (`keller@stromentlastung.dev`, Sachbearbeitung, HZA-S), Anna Vogt (`vogt@stromentlastung.dev`, Zeichnung, HZA-S).
+Beschäftigte: Aymen Mastouri (`mastouri@stromentlastung.dev`, Sachbearbeitung und Zeichnung, HZA-N), Sabine Wagner (`wagner@stromentlastung.dev`, Sachbearbeitung, HZA-N), Murat Demir (`demir@stromentlastung.dev`, Sachbearbeitung, HZA-N), Lars Becker (`becker@stromentlastung.dev`, Zeichnung, HZA-N), Petra Roth (`roth@stromentlastung.dev`, Prüfdienst, HZA-N), Jonas Keller (`keller@stromentlastung.dev`, Sachbearbeitung, HZA-S), Anna Vogt (`vogt@stromentlastung.dev`, Zeichnung, HZA-S).
 
 Aktenzeichen der Saat: `HZA-N-9b-<Entnahmejahr>-<Nr>` in der Reihenfolge der Geschichten S-01 bis S-13, Dienststelle Süd für S-08 und S-11. Beträge werden in allen Diensten in Cent als `BIGINT` geführt, Mengen in Kilowattstunden als `BIGINT`, Datumsangaben ohne Zeitanteil als `DATE`, Zeitpunkte als `TIMESTAMP WITH TIME ZONE`.
 
