@@ -2,7 +2,7 @@
 
 Ein Fachverfahren-typisches Referenzverfahren für die Steuerentlastung für Unternehmen nach § 9b StromStG: Unternehmen des Produzierenden Gewerbes und der Land- und Forstwirtschaft beantragen die Entlastung der Stromsteuer für betrieblich entnommenen Strom, das Hauptzollamt prüft, setzt fest, zahlt aus und fordert nach einer Prüfung zurück. Nachgebaut und bewusst vereinfacht, in seinen Regeln belastbar; kein Verfahren der Zollverwaltung, kein Echtbetrieb.
 
-Dieses Repository hält, was keinem Dienst gehört: das [Fachkonzept](docs/fachkonzept.md) (Rechtsstand 31. Dezember 2025, jede Regel mit Fundstelle), die [Architektur mit Bauplan](docs/architektur.md), den Keycloak-Realm, die Compose-Datei, die Gateway-Konfiguration und den Fahrstand.
+Dieses Repository hält, was keinem Dienst gehört: die [Anleitung für die Vorführung](docs/anleitung.md), das [Fachkonzept](docs/fachkonzept.md) (Rechtsstand 31. Dezember 2025, jede Regel mit Fundstelle), die [Architektur mit Bauplan](docs/architektur.md), den Keycloak-Realm, die Compose-Datei, die Gateway-Konfiguration und den Fahrstand.
 
 ## Repositories
 
@@ -41,7 +41,7 @@ scripts/demo.sh status
 scripts/demo.sh reset
 ```
 
-Der Ablauf einer Vorführung mit beiden Welten steht in [docs/demo-runbook.md](docs/demo-runbook.md).
+Der Ablauf einer Vorführung mit beiden Welten steht in der [Anleitung](docs/anleitung.md): Fachlichkeit zum Sprechen, Zugänge, jeder Akt mit Seite und Tabelle, die zu erwartenden Fragen und die Fehlersuche.
 
 ## Welcher Stand läuft
 
