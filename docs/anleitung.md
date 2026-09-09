@@ -231,10 +231,100 @@ Bescheid, Auszahlung, Außenprüfung und Änderungsbescheid bis zur Übernahme d
 **Die Daten.** Wer wissen will, ob die Daten falsch sind: die gespeicherte Rückforderung
 beträgt 6.230,00 Euro und ist richtig. Der Säumniszuschlag steht überhaupt nicht in der
 Datenbank, er wird bei jedem Lesen berechnet. *Die Daten waren nie falsch. Die Regel war es.*
+Wer das in der Datenbank selbst zeigen will, findet die Abfragen in Abschnitt 5a.
 
 **Welcher Stand läuft.** Im Menü **Stand**. Die Tabelle nennt je Dienst Fassung, Quellzweig,
 Quellstand und Bauzeitpunkt. Hier stehen alle vier auf `main`, und die Zeile darüber sagt
 das ausdrücklich. Das ist der ehrliche Ausgangspunkt.
+
+---
+
+## 5a · Der Blick in die Datenbank
+
+Dieser Abschnitt ist der stärkste Beleg dafür, dass es sich um einen Regelfehler handelt und
+nicht um verdorbene Daten. Er ist optional; wer ihn zeigt, sollte die drei Abfragen vorher
+einmal selbst abgesetzt haben.
+
+### Zugang
+
+Jeder Dienst bringt eine Datenbank-Konsole mit, erreichbar unter seinem eigenen Port. Die
+Ports hören nur auf dem eigenen Rechner.
+
+| Datenbank | Welt | Adresse |
+| --- | --- | --- |
+| Unternehmensregister | beide | http://localhost:8091/api/unternehmen/h2-console |
+| Vorgang | beide | http://localhost:8092/api/antraege/h2-console |
+| Bescheide | beide | http://localhost:8093/api/bescheide/h2-console |
+| Erhebung, `main` | vorher | http://localhost:8094/api/zahlungen/h2-console |
+| Erhebung, Branch | nachher | http://localhost:8194/api/zahlungen/h2-console |
+
+Verdoppelte Dienste sind nach außen um 100 versetzt; `demo.sh up` nennt die Ports beim
+Start. In der Anmeldemaske einzutragen:
+
+| Feld | Wert |
+| --- | --- |
+| JDBC URL | `jdbc:h2:file:/app/data/zahlung;AUTO_SERVER=TRUE` |
+| User Name | `sa` |
+| Password | leer lassen |
+
+Der Dateiname am Ende der URL ist der Name des Dienstes: `unternehmen`, `antrag`,
+`bescheid` oder `zahlung`. Dann **Connect**.
+
+### Was in welcher Datenbank steht
+
+| Dienst | Tabellen |
+| --- | --- |
+| Unternehmensregister | `HAUPTZOLLAMT`, `UNTERNEHMEN`, `ZUORDNUNG` |
+| Vorgang | `ANTRAG`, `NACHWEIS`, `VORGANGSEREIGNIS` |
+| Bescheide | `BESCHEID` |
+| Erhebung | `ZAHLUNG`, `RUECKFORDERUNG` |
+
+### Abfrage eins: die Rückforderung, in beiden Welten dieselbe
+
+In der Erhebung auf Port 8094 und danach auf Port 8194:
+
+```sql
+SELECT AKTENZEICHEN, BETRAG_CENT, FAELLIGKEIT, ZUSTAND, SAEUMNISZUSCHLAG_FESTGESETZT_CENT
+FROM RUECKFORDERUNG;
+```
+
+Beide Male dieselbe Zeile: `HZA-N-9b-2024-000002`, 623000 Cent, fällig am 13. März 2026,
+Zustand `OFFEN`, und in der letzten Spalte **null**.
+
+Das ist die Pointe. Der Säumniszuschlag steht in keiner der beiden Datenbanken. Er wird bei
+jedem Lesen berechnet, weil er mit jedem Tag wächst. Gespeichert wird er erst, wenn die
+Rückforderung beglichen ist; bis dahin gibt es nichts zu speichern und nichts zu
+korrigieren. **Die Daten waren nie falsch, in keiner der beiden Welten. Die Regel war es.**
+
+### Abfrage zwei: das Vorgangsprotokoll lässt sich nicht ändern
+
+Im Vorgang auf Port 8092:
+
+```sql
+UPDATE VORGANGSEREIGNIS SET BEMERKUNG = 'manipuliert' WHERE ID = 1;
+```
+
+Die Datenbank lehnt ab: *Vorgangsereignisse sind unveränderlich: weder Änderung noch
+Löschung zulässig.* Der Schutz sitzt in der Datenbank, nicht in der Anwendung, und gilt
+deshalb auch für den, der mit einem Werkzeug daran vorbeigeht. Dasselbe gilt für `DELETE`.
+
+Das ist die Revisionssicherheit, die ein Fachverfahren braucht, und sie lässt sich in zehn
+Sekunden vorführen.
+
+### Abfrage drei: der Vorgang von vorn bis hinten
+
+Ebenfalls im Vorgang:
+
+```sql
+SELECT ZEITPUNKT, AKTEUR, ROLLE, ART, ZUSTAND_VORHER, ZUSTAND_NACHHER, BEMERKUNG
+FROM VORGANGSEREIGNIS
+WHERE AKTENZEICHEN = 'HZA-N-9b-2024-000002'
+ORDER BY ZEITPUNKT;
+```
+
+Elf Zeilen von der Antragstellung im März 2025 über Bescheid, Auszahlung, Prüfvermerk der
+Außenprüfung, Änderungsbescheid bis zur Übernahme der Bearbeitung. Wer wissen will, wer
+wann was entschieden hat, liest es hier.
 
 ---
 
@@ -366,6 +456,9 @@ nichts zu vergleichen.
 | Anwendung auf `main` | http://localhost:8090 |
 | Anwendung mit dem Branch | http://localhost:8095 |
 | Keycloak | http://localhost:9091 (Verwaltung `admin` / `admin`) |
+| Datenbank der Erhebung, `main` | http://localhost:8094/api/zahlungen/h2-console |
+| Datenbank der Erhebung, Branch | http://localhost:8194/api/zahlungen/h2-console |
+| Datenbank des Vorgangs | http://localhost:8092/api/antraege/h2-console |
 
 **Tickets in Jira**
 

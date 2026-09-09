@@ -34,6 +34,9 @@ services:
       STROMENTLASTUNG_UNTERNEHMEN_URL: http://unternehmen:8091/api/unternehmen
       STROMENTLASTUNG_BESCHEID_URL: http://bescheid:8093/api/bescheide
       STROMENTLASTUNG_ZAHLUNG_URL: http://zahlung:8094/api/zahlungen
+      STROMENTLASTUNG_H2_CONSOLE_REMOTE: "true"
+    # Offen für den Blick in die Datenbank über die H2-Konsole des Dienstes.
+    ports: ["127.0.0.1:8091:8091"]
     volumes: ["unternehmen-data:/app/data"]
     networks: [stromentlastung]
     depends_on: [keycloak]
@@ -46,6 +49,8 @@ services:
         BUILD_REVISION: ${ANTRAG_REVISION:-unbekannt}
         BUILD_REF: ${ANTRAG_REF:-unbekannt}
     environment: *dienst-env
+    # Offen für den Blick in die Datenbank über die H2-Konsole des Dienstes.
+    ports: ["127.0.0.1:8092:8092"]
     volumes: ["antrag-data:/app/data"]
     networks: [stromentlastung]
     depends_on: [keycloak, unternehmen, bescheid, zahlung]
@@ -58,6 +63,8 @@ services:
         BUILD_REVISION: ${BESCHEID_REVISION:-unbekannt}
         BUILD_REF: ${BESCHEID_REF:-unbekannt}
     environment: *dienst-env
+    # Offen für den Blick in die Datenbank über die H2-Konsole des Dienstes.
+    ports: ["127.0.0.1:8093:8093"]
     volumes: ["bescheid-data:/app/data"]
     networks: [stromentlastung]
     depends_on: [keycloak]
@@ -70,6 +77,8 @@ services:
         BUILD_REVISION: ${ZAHLUNG_REVISION:-unbekannt}
         BUILD_REF: ${ZAHLUNG_REF:-unbekannt}
     environment: *dienst-env
+    # Offen für den Blick in die Datenbank über die H2-Konsole des Dienstes.
+    ports: ["127.0.0.1:8094:8094"]
     volumes: ["zahlung-data:/app/data"]
     networks: [stromentlastung]
     depends_on: [keycloak]

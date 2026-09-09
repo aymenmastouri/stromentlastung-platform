@@ -119,6 +119,9 @@ cmd_up() {
   say "Ready"
   ok "before:  http://localhost:$MAIN_PORT"
   ok "fixed:   http://localhost:$FIXED_PORT   (${changed[*]})"
+  for repo in "${changed[@]}"; do
+    [ "$repo" = ui ] || ok "         database of the second $repo on port $((PORTS[$repo] + 100))"
+  done
   ok "sign in with mastouri@stromentlastung.dev / stromentlastung"
 }
 
@@ -140,11 +143,15 @@ generate_override() {
       echo "        BUILD_REF: $branch"
       echo "    networks: [stromentlastung]"
       if [ "$repo" != ui ]; then
+        # Die zweite Welt hört auf denselben Port im Container, nach außen um 100 versetzt,
+        # damit sich beide Datenbanken nebeneinander ansehen lassen.
+        echo "    ports: [\"127.0.0.1:$((PORTS[$repo] + 100)):${PORTS[$repo]}\"]"
         echo "    depends_on: [keycloak]"
         echo "    volumes: [\"${repo}-fixed-data:/app/data\"]"
         echo "    environment:"
         echo "      STROMENTLASTUNG_ISSUER: http://localhost:9091/realms/stromentlastung"
         echo "      STROMENTLASTUNG_JWKS_URI: http://keycloak:8080/realms/stromentlastung/protocol/openid-connect/certs"
+        echo "      STROMENTLASTUNG_H2_CONSOLE_REMOTE: \"true\""
         for dep in unternehmen bescheid zahlung; do
           local host=$dep
           [[ " ${changed[*]} " == *" $dep "* ]] && host="${dep}-fixed"
