@@ -30,6 +30,12 @@ Zollverwaltung. Die Anwendung sagt das in jeder Ansicht im Kopfband: *Referenzve
 kein Echtbetrieb.* Diesen Satz einmal am Anfang aussprechen, danach die Anwendung nie wieder
 verteidigen.
 
+Im selben Kopfband steht rechts daneben, auf welchem Quellzweig die Dienste laufen. Auf
+`main` steht dort **main**, in der zweiten Welt **main + codegen/STROM-4**. Damit ist auf
+jeder Seite und auf jedem Foto vom Beamer zu erkennen, welche der beiden Welten zu sehen
+ist. Die Angabe kommt aus den Meldungen der Dienste selbst; ein Klick darauf führt zur
+Seite **Stand** mit allen Einzelheiten.
+
 ---
 
 ## 2 · Durchgang eins: der Fehler, Ticket STROM-4
@@ -265,7 +271,8 @@ Zum Nachschlagen während der Vorführung, was der Lauf hervorgebracht hat:
 
 Zwei Browser-Fenster nebeneinander machen den Punkt ohne ein weiteres Wort.
 
-**Der Beweis, dass wirklich ein anderer Stand läuft:** im Menü **Stand**. Auf 8090 meldet
+**Der Beweis, dass wirklich ein anderer Stand läuft:** oben im Kopfband steht jetzt
+**main + codegen/STROM-4** statt **main**. Wer es genauer will: im Menü **Stand**. Auf 8090 meldet
 jeder Dienst `main`; auf 8095 meldet die Erhebung `codegen/STROM-4` und ihren Commit, und
 die Zeile darüber sagt, dass die Dienste nicht mehr alle auf demselben Quellzweig laufen.
 Diese Angaben stammen aus dem Bau der Abbilder, nicht aus einer Einstellung; sie lassen sich
@@ -284,8 +291,9 @@ dorthin: aus „falscher Betrag" auf die Fundstelle im Gesetz, von dort auf die 
 Code, dazu ein Test, der den Fehler künftig verhindert, und der Nachweis, dass die
 vorhandenen Tests grün bleiben.
 
-**„Woher weiß ich, dass da wirklich ein anderer Stand läuft?"** Menü **Stand**, in beiden
-Fenstern. Die Angaben kommen aus dem Bau.
+**„Woher weiß ich, dass da wirklich ein anderer Stand läuft?"** Das Kopfband nennt den
+Quellzweig auf jeder Seite, und das Menü **Stand** zeigt ihn je Dienst mit Commit und
+Bauzeitpunkt. Die Angaben kommen aus dem Bau der Abbilder, nicht aus einer Einstellung.
 
 **„Kann das auch Neues bauen, nicht nur reparieren?"** Ja, und das ist der zweite Durchgang:
 eine Gesetzesänderung, die durch drei Repositories wandert und dabei die alten Entnahmejahre
