@@ -74,6 +74,27 @@ services:
     networks: [stromentlastung]
     depends_on: [ui, unternehmen, antrag, bescheid, zahlung]
 
+  # -- Vorführung: die zweite Welt. Nur die Erhebung stammt aus dem gelieferten
+  # Branch; Register, Vorgang, Bescheide und Oberfläche sind dieselben Container.
+  zahlung-branch:
+    profiles: [nachher]
+    build: ../.demo/zahlung-strom4
+    environment: *dienst-env
+    volumes: ["zahlung-branch-data:/app/data"]
+    networks: [stromentlastung]
+    depends_on: [keycloak]
+
+  gateway-nachher:
+    profiles: [nachher]
+    image: nginx:1.27-alpine
+    volumes:
+      - ./gateway/nginx-nachher.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./gateway/proxy_params_stromentlastung:/etc/nginx/proxy_params_stromentlastung:ro
+    ports:
+      - "${STROMENTLASTUNG_NACHHER_PORT:-8095}:80"
+    networks: [stromentlastung]
+    depends_on: [ui, unternehmen, antrag, bescheid, zahlung-branch]
+
 networks:
   stromentlastung:
     driver: bridge
@@ -83,3 +104,4 @@ volumes:
   antrag-data:
   bescheid-data:
   zahlung-data:
+  zahlung-branch-data:

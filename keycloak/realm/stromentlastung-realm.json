@@ -50,15 +50,17 @@
       "baseUrl": "http://localhost:4202",
       "redirectUris": [
         "http://localhost:4202/*",
-        "http://localhost:8090/*"
+        "http://localhost:8090/*",
+        "http://localhost:8095/*"
       ],
       "webOrigins": [
         "http://localhost:4202",
-        "http://localhost:8090"
+        "http://localhost:8090",
+        "http://localhost:8095"
       ],
       "attributes": {
         "pkce.code.challenge.method": "S256",
-        "post.logout.redirect.uris": "http://localhost:4202/*##http://localhost:8090/*"
+        "post.logout.redirect.uris": "http://localhost:4202/*##http://localhost:8090/*##http://localhost:8095/*"
       },
       "fullScopeAllowed": true,
       "protocolMappers": [

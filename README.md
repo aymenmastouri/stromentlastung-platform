@@ -31,7 +31,14 @@ scripts/stromentlastung.sh main      # alle Repos zurück auf main und neu start
 
 Voraussetzungen: Docker, JDK 17, Node 22. Der erste Start lädt Maven und die Abhängigkeiten und dauert entsprechend; danach sind die Dienste in unter einer Minute oben. Jeder Dienst hält seine H2-Datenbank im Dateimodus unter `./data/` seines Repositories; die Saatdaten-Geschichten aus Fachkonzept Kap. 12 werden von Flyway eingespielt.
 
-Containerbetrieb: `docker compose --profile full up --build` baut alles und stellt den Stapel hinter nginx auf `localhost:8090` bereit.
+Containerbetrieb: `docker compose -p stromentlastung --profile full up -d --build` baut alles und stellt den Stapel hinter nginx auf `localhost:8090` bereit.
+
+Für eine Gegenüberstellung startet das zusätzliche Profil `nachher` einen zweiten Erhebungsdienst aus einem gelieferten Branch samt eigenem Eingang auf `localhost:8095`. Register, Vorgang, Bescheide und Oberfläche sind in beiden Welten dieselben Container; nur die Erhebung unterscheidet sich, und beide führen ihre eigene Datenbank mit derselben Saat. Als Bauquelle dient eine Auscheckung des Branches unter `.demo/zahlung-strom4`:
+
+```bash
+git -C stromentlastung-zahlung worktree add ../.demo/zahlung-strom4 codegen/STROM-4
+docker compose -p stromentlastung --profile full --profile nachher up -d --build
+```
 
 ## In die Datenbanken schauen
 
