@@ -148,6 +148,11 @@ Remove the container and start again: `docker compose -p stromentlastung up -d -
 Check `docker compose -p stromentlastung ps` for `zahlung` and `zahlung-fixed`, both must
 be up.
 
+**Keycloak does not start and its log says no space left on device.** The Docker virtual
+machine has run out of disk. Freeing the build cache is always safe and usually enough:
+`docker builder prune -f`, then `docker compose -p stromentlastung up -d --force-recreate keycloak`.
+Check the headroom with `docker system df` before a demonstration.
+
 **Port already in use.** The development stack from `scripts/stromentlastung.sh` may still
 be running. Stop it with `scripts/stromentlastung.sh stop`. The two setups keep separate
 databases and must not run at the same time.
