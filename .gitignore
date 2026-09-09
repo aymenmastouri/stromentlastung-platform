@@ -2,3 +2,5 @@ data/
 *.log
 .DS_Store
 .idea/
+docker-compose.demo.yml
+gateway/nginx-fixed.conf

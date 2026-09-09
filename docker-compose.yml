@@ -74,28 +74,6 @@ services:
     networks: [stromentlastung]
     depends_on: [ui, unternehmen, antrag, bescheid, zahlung]
 
-  # -- Demonstration: the second world. Only the treasury service is built from the
-  # delivered branch; register, case, notices and the user interface are the very
-  # same containers. Each treasury keeps its own database with the identical seed.
-  zahlung-fixed:
-    profiles: [fixed]
-    build: ../.demo/zahlung-strom4
-    environment: *dienst-env
-    volumes: ["zahlung-fixed-data:/app/data"]
-    networks: [stromentlastung]
-    depends_on: [keycloak]
-
-  gateway-fixed:
-    profiles: [fixed]
-    image: nginx:1.27-alpine
-    volumes:
-      - ./gateway/nginx-fixed.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./gateway/proxy_params_stromentlastung:/etc/nginx/proxy_params_stromentlastung:ro
-    ports:
-      - "${STROMENTLASTUNG_FIXED_PORT:-8095}:80"
-    networks: [stromentlastung]
-    depends_on: [ui, unternehmen, antrag, bescheid, zahlung-fixed]
-
 networks:
   stromentlastung:
     driver: bridge
@@ -105,4 +83,3 @@ volumes:
   antrag-data:
   bescheid-data:
   zahlung-data:
-  zahlung-fixed-data:

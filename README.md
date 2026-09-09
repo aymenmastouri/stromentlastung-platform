@@ -33,11 +33,12 @@ Voraussetzungen: Docker, JDK 17, Node 22. Der erste Start lädt Maven und die Ab
 
 Containerbetrieb: `docker compose -p stromentlastung --profile full up -d --build` baut alles und stellt den Stapel hinter nginx auf `localhost:8090` bereit.
 
-Für eine Gegenüberstellung startet das zusätzliche Profil `fixed` einen zweiten Erhebungsdienst aus einem gelieferten Branch samt eigenem Eingang auf `localhost:8095`. Register, Vorgang, Bescheide und Oberfläche sind in beiden Welten dieselben Container; nur die Erhebung unterscheidet sich, und beide führen ihre eigene Datenbank mit derselben Saat. Als Bauquelle dient eine Auscheckung des Branches unter `.demo/zahlung-strom4`:
+Für eine Gegenüberstellung nimmt `scripts/demo.sh up <TICKET>` einen gelieferten Branch, ermittelt, welche Repositories er berührt hat, baut genau diese ein zweites Mal und stellt einen zweiten Eingang auf `localhost:8095` davor. Alles Übrige ist in beiden Welten derselbe Container, und jeder verdoppelte Dienst führt seine eigene Datenbank mit derselben Saat.
 
 ```bash
-git -C stromentlastung-zahlung worktree add ../.demo/zahlung-strom4 codegen/STROM-4
-docker compose -p stromentlastung --profile full --profile fixed up -d --build
+scripts/demo.sh up STROM-4
+scripts/demo.sh status
+scripts/demo.sh reset
 ```
 
 Der Ablauf einer Vorführung mit beiden Welten steht in [docs/demo-runbook.md](docs/demo-runbook.md).

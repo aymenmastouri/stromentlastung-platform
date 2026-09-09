@@ -16,58 +16,49 @@ therefore charges 373.80 euros where the law allows 372.00 euros.
 
 ## 0 · Prerequisites
 
-Docker is running. Everything else lives in the images.
+Docker is running, and it has room. Several gigabytes of images are built here, and a full
+disk shows up as Keycloak refusing to start:
 
 ```bash
-cd ~/stromentlastung/stromentlastung-platform
-docker compose -p stromentlastung --profile full --profile fixed build
-```
-
-The first build takes several minutes because the four Java services and the Angular
-application are compiled inside the images. Later builds reuse the layer cache.
-
-The `fixed` profile builds its image from a checkout of the delivered branch under
-`../.demo/zahlung-strom4`. Create it once:
-
-```bash
-git -C ~/stromentlastung/stromentlastung-zahlung worktree add ../.demo/zahlung-strom4 codegen/STROM-4
+docker system df
 ```
 
 ## 1 · Start
 
-Both worlds at once:
+One command takes the ticket and does the rest. It fetches the delivered branch, works out
+which repositories it actually touched, builds those, and puts a second entrance in front
+of them:
 
 ```bash
-docker compose -p stromentlastung --profile full --profile fixed up -d
+cd ~/stromentlastung/stromentlastung-platform
+./scripts/demo.sh up STROM-4
 ```
 
-Only the world with the defect, if the fix is not part of the session:
+The first run takes several minutes because the services are compiled inside the images.
+Later runs reuse the layer cache. The script prints, per repository, whether it differs
+from main, and it warns when the branch is not on `origin` yet and had to be taken from the
+pipeline clone.
 
-```bash
-docker compose -p stromentlastung --profile full up -d
-```
-
-Wait until everything answers. Keycloak is the slowest, roughly half a minute. The user
-interface answers long before sign-in works, so the check has to include the realm:
-
-```bash
-until curl -fsS -o /dev/null http://localhost:9091/realms/stromentlastung \
-   && curl -fsS -o /dev/null http://localhost:8090/api/unternehmen/v3/api-docs \
-   && curl -fsS -o /dev/null http://localhost:8095/api/zahlungen/v3/api-docs \
-   && curl -fsS -o /dev/null http://localhost:8090/; do sleep 3; done; echo ready
-```
-
-| Address | World | Late-payment surcharge |
+| Address | World | For STROM-4 |
 | --- | --- | --- |
-| http://localhost:8090 | `main`, without the fix | 373.80 € |
-| http://localhost:8095 | branch `codegen/STROM-4` | 372.00 € |
+| http://localhost:8090 | the application on `main` | surcharge 373.80 € |
+| http://localhost:8095 | the same, with the delivered branch | surcharge 372.00 € |
 
 Sign in with `mastouri@stromentlastung.dev` and the password `stromentlastung` in both.
 Other accounts are listed in the README.
 
-Only the treasury service exists twice. Register, case, notices and the user interface are
-the same containers in both worlds, and each treasury keeps its own database with the
-identical seed. That is the statement for the audience: same data, different rule.
+Only what the branch touched exists twice. For STROM-4 that is the treasury service alone;
+register, case, notices and the user interface are the very same containers in both worlds,
+and each duplicated service keeps its own database with the identical seed. That is the
+statement for the audience: same data, different rule.
+
+Any other ticket works the same way, and the second world grows to whatever that branch
+touched:
+
+```bash
+./scripts/demo.sh up STROM-2      # or a branch name: ./scripts/demo.sh up codegen/STROM-2
+./scripts/demo.sh status
+```
 
 ## 2 · Act one, the application with the defect
 
@@ -120,19 +111,17 @@ https://github.com/aymenmastouri/stromentlastung-zahlung/compare/main...codegen/
 
 ## 5 · Reset and stop
 
-Back to the seeded state, both worlds:
+Stop both worlds and keep the databases, so a second demonstration continues where the
+first one ended:
 
 ```bash
-docker compose -p stromentlastung --profile full --profile fixed down -v
+./scripts/demo.sh down
 ```
 
-`down -v` removes the database volumes, so the next start seeds again. Without `-v` the
-databases survive and the demonstration keeps whatever was clicked.
-
-Stop without losing the data:
+Back to the seeded state, dropping the databases and the generated configuration:
 
 ```bash
-docker compose -p stromentlastung --profile full --profile fixed stop
+./scripts/demo.sh reset
 ```
 
 ## 6 · If something goes wrong
@@ -144,9 +133,8 @@ resolve their targets per request, so this should not happen; if it does, restar
 **Sign-in fails after a rebuild of Keycloak.** The realm is imported on first start only.
 Remove the container and start again: `docker compose -p stromentlastung up -d --force-recreate keycloak`.
 
-**Both worlds show the same number.** The gateways are pointing at the same treasury.
-Check `docker compose -p stromentlastung ps` for `zahlung` and `zahlung-fixed`, both must
-be up.
+**Both worlds show the same number.** Run `./scripts/demo.sh status`. It lists which
+services exist twice and prints the surcharge behind both entrances.
 
 **Keycloak does not start and its log says no space left on device.** The Docker virtual
 machine has run out of disk. Freeing the build cache is always safe and usually enough:
@@ -156,3 +144,7 @@ Check the headroom with `docker system df` before a demonstration.
 **Port already in use.** The development stack from `scripts/stromentlastung.sh` may still
 be running. Stop it with `scripts/stromentlastung.sh stop`. The two setups keep separate
 databases and must not run at the same time.
+
+**The script says no runtime repository differs.** The branch exists but changed nothing
+that runs in a container, for instance only documentation or tests. There is nothing to
+compare, and the demonstration has no second world.
