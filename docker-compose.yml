@@ -23,7 +23,11 @@ services:
 
   unternehmen:
     profiles: [full]
-    build: ../stromentlastung-unternehmen
+    build:
+      context: ../stromentlastung-unternehmen
+      args:
+        BUILD_REVISION: ${UNTERNEHMEN_REVISION:-unbekannt}
+        BUILD_REF: ${UNTERNEHMEN_REF:-unbekannt}
     environment: &dienst-env
       STROMENTLASTUNG_ISSUER: http://localhost:9091/realms/stromentlastung
       STROMENTLASTUNG_JWKS_URI: http://keycloak:8080/realms/stromentlastung/protocol/openid-connect/certs
@@ -36,7 +40,11 @@ services:
 
   antrag:
     profiles: [full]
-    build: ../stromentlastung-antrag
+    build:
+      context: ../stromentlastung-antrag
+      args:
+        BUILD_REVISION: ${ANTRAG_REVISION:-unbekannt}
+        BUILD_REF: ${ANTRAG_REF:-unbekannt}
     environment: *dienst-env
     volumes: ["antrag-data:/app/data"]
     networks: [stromentlastung]
@@ -44,7 +52,11 @@ services:
 
   bescheid:
     profiles: [full]
-    build: ../stromentlastung-bescheid
+    build:
+      context: ../stromentlastung-bescheid
+      args:
+        BUILD_REVISION: ${BESCHEID_REVISION:-unbekannt}
+        BUILD_REF: ${BESCHEID_REF:-unbekannt}
     environment: *dienst-env
     volumes: ["bescheid-data:/app/data"]
     networks: [stromentlastung]
@@ -52,7 +64,11 @@ services:
 
   zahlung:
     profiles: [full]
-    build: ../stromentlastung-zahlung
+    build:
+      context: ../stromentlastung-zahlung
+      args:
+        BUILD_REVISION: ${ZAHLUNG_REVISION:-unbekannt}
+        BUILD_REF: ${ZAHLUNG_REF:-unbekannt}
     environment: *dienst-env
     volumes: ["zahlung-data:/app/data"]
     networks: [stromentlastung]

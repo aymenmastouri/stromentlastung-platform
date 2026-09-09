@@ -71,6 +71,10 @@ The sentence that carries the act: a late-payment surcharge is one percent of a 
 50 euros, so it is always a multiple of 50 cents. A surcharge ending in 80 cents cannot be
 right.
 
+If the audience wants to know what is running: the menu entry **Stand** lists all four
+services with their release, source branch, commit and build time. Here they are all on
+`main`, which is the honest starting point of the demonstration.
+
 Optional, for the audience that wants to see the data: open the case
 `HZA-N-9b-2024-000002` and scroll to **Zahlungen**. The stored recovery is 6,230.00 euros
 and correct. The surcharge is not stored at all, it is computed on every read. The data was
@@ -102,6 +106,12 @@ What the run produced, for reference while presenting:
 3. The same row now reads **372.00 €**, and the assessment base behind it is 6,200.00 €.
 
 Two browser tabs side by side make the point without a single further word.
+
+If someone asks whether this really is a different build, the application answers it
+itself. Choose **Stand** in the menu. On 8090 every service reports `main`; on 8095 the
+treasury reports `codegen/STROM-4` and its commit, and the page says in one line that the
+services no longer run on the same source branch. The values come from the build, not from
+configuration, so they cannot be claimed.
 
 The change itself, for those who ask to see code:
 

@@ -43,6 +43,10 @@ scripts/demo.sh reset
 
 Der Ablauf einer Vorführung mit beiden Welten steht in [docs/demo-runbook.md](docs/demo-runbook.md).
 
+## Welcher Stand läuft
+
+Jeder Dienst meldet unter `<Kontextpfad>/version`, welche Fassung er ist, aus welchem Quellzweig und welchem Commit er gebaut wurde und wann. Version und Bauzeitpunkt entstehen im Bau selbst, die Herkunft wird beim Bau des Abbilds als Argument mitgegeben; ohne Angabe meldet der Dienst „unbekannt“ statt einer Behauptung. Die Oberfläche stellt alle vier unter *Stand* nebeneinander und sagt, ob sie auf demselben Quellzweig laufen.
+
 ## In die Datenbanken schauen
 
 Jeder Dienst öffnet bei laufendem Betrieb seine H2-Konsole unter dem Kontextpfad, etwa `http://localhost:8094/api/zahlungen/h2-console` (entsprechend `8091/api/unternehmen`, `8092/api/antraege`, `8093/api/bescheide`). JDBC-URL wie im Dienst, `jdbc:h2:file:./data/zahlung;AUTO_SERVER=TRUE`, Benutzer `sa`, kein Passwort. Dort lässt sich der Schutz des Vorgangsprotokolls vorführen: ein `UPDATE` oder `DELETE` auf `vorgangsereignis` im Vorgangsdienst lehnt der Trigger ab. Wer lieber ein Werkzeug wie IntelliJ oder DBeaver nutzt, verbindet sich mit derselben URL über den absoluten Pfad der Datei; `AUTO_SERVER` erlaubt den Parallelzugriff bei laufendem Dienst.
