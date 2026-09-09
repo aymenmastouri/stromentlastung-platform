@@ -67,22 +67,29 @@ cmd_up() {
   local branch; branch=$(resolve_branch "$ticket")
   say "Branch $branch"
 
-  rm -rf "$DEMO"; mkdir -p "$DEMO"
-  local changed=() from_clone=0
+  # Decide first, change nothing yet: a branch that touches nothing must leave a running
+  # demonstration alone.
+  local changed=() shas=() from_clone=0
   for repo in "${RUNTIME[@]}"; do
     local dir="$ROOT/stromentlastung-$repo" sha main_sha
-    git -C "$dir" worktree prune
     if ! sha=$(fetch_branch "$repo" "$branch"); then ok "$repo: not on the branch"; continue; fi
     git -C "$dir" fetch -q origin main
     main_sha=$(git -C "$dir" rev-parse origin/main)
     if [ "$sha" = "$main_sha" ]; then ok "$repo: identical to main"; continue; fi
-    git -C "$dir" worktree add -q --detach "$DEMO/$repo" "$sha"
-    changed+=("$repo")
+    changed+=("$repo"); shas+=("$sha")
     git -C "$dir" show-ref -q --verify "refs/remotes/origin/$branch" || from_clone=1
     ok "$repo: differs, built from ${sha:0:7}"
   done
   [ ${#changed[@]} -eq 0 ] && die "no runtime repository differs from main on $branch — nothing to compare"
   [ $from_clone -eq 1 ] && warn "branch taken from the pipeline clone; it is not on origin yet"
+
+  rm -rf "$DEMO"; mkdir -p "$DEMO"
+  local i
+  for i in "${!changed[@]}"; do
+    local dir="$ROOT/stromentlastung-${changed[$i]}"
+    git -C "$dir" worktree prune
+    git -C "$dir" worktree add -q --detach "$DEMO/${changed[$i]}" "${shas[$i]}"
+  done
 
   generate_override "${changed[@]}"
   generate_nginx "${changed[@]}"
