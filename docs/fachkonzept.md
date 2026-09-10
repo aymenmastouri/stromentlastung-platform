@@ -277,7 +277,7 @@ Vorgänge werden nicht gelöscht. Der Antragsteller liest das Protokoll seines V
 
 ## 12 Saatdaten-Geschichten
 
-Die Saat erzählt je Vorgang eine Geschichte, die genau eine Regel oder Frist sichtbar macht. Entnahmejahre sind absolut, weil sie am Recht hängen; Vorgangsdaten werden beim Einspielen relativ zum Einspielzeitpunkt gesetzt, sofern nichts anderes angegeben ist, damit Fristläufe zum Vorführzeitpunkt stimmen. Unternehmen und Personen sind erfunden.
+Die Saat erzählt je Vorgang eine Geschichte, die genau eine Regel oder Frist sichtbar macht. Entnahmejahre sind absolut, weil sie am Recht hängen; Vorgangsdaten werden beim Einspielen relativ zum Einspielzeitpunkt gesetzt, sofern nichts anderes angegeben ist, damit Fristläufe zum Betrachtungszeitpunkt stimmen. Unternehmen und Personen sind erfunden.
 
 | Nr. | Unternehmen (Abschnitt, Dienststelle) | Entnahmejahr | Mengen in kWh | Berechnung | Zustand | Zeigt |
 | --- | --- | --- | --- | --- | --- | --- |
