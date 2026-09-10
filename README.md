@@ -2,7 +2,7 @@
 
 Ein Fachverfahren-typisches Referenzverfahren für die Steuerentlastung für Unternehmen nach § 9b StromStG: Unternehmen des Produzierenden Gewerbes und der Land- und Forstwirtschaft beantragen die Entlastung der Stromsteuer für betrieblich entnommenen Strom, das Hauptzollamt prüft, setzt fest, zahlt aus und fordert nach einer Prüfung zurück. Nachgebaut und bewusst vereinfacht, in seinen Regeln belastbar; kein Verfahren der Zollverwaltung, kein Echtbetrieb.
 
-Dieses Repository hält, was keinem Dienst gehört: die [Anleitung für die Vorführung](docs/anleitung.md), das [Fachkonzept](docs/fachkonzept.md) (Rechtsstand 31. Dezember 2025, jede Regel mit Fundstelle), die [Architektur mit Bauplan](docs/architektur.md), den Keycloak-Realm, die Compose-Datei, die Gateway-Konfiguration und den Fahrstand.
+Dieses Repository hält, was keinem Dienst gehört: das [Fachkonzept](docs/fachkonzept.md) (Rechtsstand 31. Dezember 2025, jede Regel mit Fundstelle), die [Architektur mit Bauplan](docs/architektur.md), den Keycloak-Realm, die Compose-Datei, die Gateway-Konfiguration und den Fahrstand.
 
 ## Repositories
 
@@ -25,7 +25,7 @@ scripts/stromentlastung.sh start     # Keycloak (Compose), vier Dienste (JDK 17,
 scripts/stromentlastung.sh status
 scripts/stromentlastung.sh stop
 scripts/stromentlastung.sh reset     # stop und H2-Dateien löschen; der nächste Start sät neu
-scripts/stromentlastung.sh show codegen/STROM-4   # in allen Repos holen, den Branch auschecken, wo er existiert, neu starten
+scripts/stromentlastung.sh show <branch>   # in allen Repos holen, den Branch auschecken, wo er existiert, neu starten
 scripts/stromentlastung.sh main      # alle Repos zurück auf main und neu starten
 ```
 
@@ -33,15 +33,6 @@ Voraussetzungen: Docker, JDK 17, Node 22. Der erste Start lädt Maven und die Ab
 
 Containerbetrieb: `docker compose -p stromentlastung --profile full up -d --build` baut alles und stellt den Stapel hinter nginx auf `localhost:8090` bereit.
 
-Für eine Gegenüberstellung nimmt `scripts/demo.sh up <TICKET>` einen gelieferten Branch, ermittelt, welche Repositories er berührt hat, baut genau diese ein zweites Mal und stellt einen zweiten Eingang auf `localhost:8095` davor. Alles Übrige ist in beiden Welten derselbe Container, und jeder verdoppelte Dienst führt seine eigene Datenbank mit derselben Saat.
-
-```bash
-scripts/demo.sh up STROM-4
-scripts/demo.sh status
-scripts/demo.sh reset
-```
-
-Der Ablauf einer Vorführung mit beiden Welten steht in der [Anleitung](docs/anleitung.md): Fachlichkeit zum Sprechen, Zugänge, jeder Akt mit Seite und Tabelle, die zu erwartenden Fragen und die Fehlersuche.
 
 ## Welcher Stand läuft
 
